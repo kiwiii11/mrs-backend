@@ -3,6 +3,7 @@ package com.mrs.config;
 import com.mrs.entity.*;
 import com.mrs.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,18 @@ public class DataSeeder implements CommandLineRunner {
     private final ShowtimeRepository showtimeRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // not final on purpose: @Value fills these in. On the live server, set ADMIN_EMAIL / ADMIN_PASSWORD.
+    @Value("${ADMIN_EMAIL:admin@mrs.com}")
+    private String adminEmail;
+
+    @Value("${ADMIN_PASSWORD:admin123}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) {
-        if (!userRepository.existsByEmail("admin@mrs.com")) {
-            userRepository.save(User.builder().name("Admin").email("admin@mrs.com")
-                    .password(passwordEncoder.encode("admin123")).role(Role.ADMIN).build());
+        if (!userRepository.existsByEmail(adminEmail)) {
+            userRepository.save(User.builder().name("Admin").email(adminEmail)
+                    .password(passwordEncoder.encode(adminPassword)).role(Role.ADMIN).build());
         }
 
         if (seatRepository.count() == 0) {
