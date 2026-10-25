@@ -1,0 +1,20 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/movie_reservation}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: ${SHOW_SQL:true}
+    open-in-view: false
+
+app:
+  jwt:
+    # Base64-encoded secret, 256 bits or longer. Set JWT_SECRET on the server.
+    secret: ${JWT_SECRET:c2hoc2hoc2hoc2hoY2hhbmdlLXRoaXMtc2VjcmV0LWluLXByb2R1Y3Rpb24tcGxlYXNlLTEyMzQ1Ng==}
+    expiration-ms: 86400000
